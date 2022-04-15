@@ -1,7 +1,8 @@
 const assert = require("assert");
 const ganache = require("ganache-cli");
 const Web3 = require("web3");
-const {interface, bytecode} = require("../compile");
+// const {interface, bytecode} = require("../compile"); => using 0.4.17
+const {abi, evm} = require("../compile");
 
 // Instantiate the Web3 class
 const web3 = new Web3(ganache.provider()); //tell instance to connect to local test network on our pc
@@ -17,9 +18,9 @@ beforeEach(async () => {
    accounts =  await web3.eth.getAccounts();
 
     // Use one of the accounts to deploy the contracts
-    inbox = await new web3.eth.Contract(JSON.parse(interface))
+    inbox = await new web3.eth.Contract(abi)
         .deploy({
-            data: bytecode,
+            data: evm.bytecode.object,
             arguments: [
                 INITIAL_STRING
             ]
